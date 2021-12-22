@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='./loader.css') }}"/> -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather+Sans&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&family=Ubuntu&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class = "bg"></div>
+    <div class = "bg bg2"></div>
+    <div class = "bg bg3"></div>
+    <div class = "content"></div>
+
+    <form id = "uploadform" method = "post" style="width:500px;margin:auto;" enctype="multipart/form-data" >
+            <div style="vertical-align: middle;text-align: center; ">
+    
+                <h2 style="color:rgb(27, 27, 31); font-family: sans-serif; font-size:50px; display: inline-block; margin-bottom: 0em; vertical-align: middle;"><b>Prediction</b></h2>
+            </div>
+            <div style="align-items: center; margin: 20px; border-radius: 0.45rem; border:2px solid rgb(29, 29, 29);background-color: rgba(190, 190, 190, 0.178);">
+                <div style="padding: 6%;">
+                    <!-- <h5 style="text-align: center; font-family: 'Merriweather Sans';font-weight: normal">Upload Image:</h5> -->
+                    <input style = "margin: 0 auto;" id = "image" type="file" name = "file">
+                </div>
+                <!-- <div style="padding: 6%;">
+                    <h5 style="text-align: center; font-family: 'Merriweather Sans';font-weight: normal">Upload Model:</h5>
+                    <input style = "margin: 0 auto;" type="file" id = "model" name = "model">
+                </div> -->
+                <div style="padding: 6%;text-align:center;">
+                    <button class="btn btn-dark" type = "submit" value= "class" id = "submit">UPLOAD IMAGE</button>
+                  <!-- </a> -->
+                </div>
+                <div style="padding: 6%;text-align:center;">
+                    <button class="btn btn-dark" type = "submit" value= "class" id = "submit1">UPLOAD MODEL & PREDICT</button>
+                  <!-- </a> -->
+                </div>
+                
+            </div>
+            {% if className != "" %}
+                <div class = "predictedValue">
+                    <h2 :&nbsp; id = "prediction" style="text-align:center; font-family: sans-serif; font-weight: normal;display: inline-block; margin-bottom: 0em; vertical-align: middle;"></h2>
+                </div>
+                {% endif %}
+            
+    </form>
+
+<script>
+    $(function() {
+    $('#submit').click(function() {
+        event.preventDefault();
+        var formData = new FormData($('#uploadform')[0]);
+        // fd.append('file', $('#image').files[0]);
+        // fd.append('file', $("#model").files[0]);
+
+        $.ajax({
+            type: 'POST',
+            url: '/uploadimage',
+            data: formData,
+            contentType: false,
+            processData: false,
+            dataType: 'json'
+        }).done(function(data, textStatus, jqXHR){
+            console.log(data);
+            console.log(textStatus);
+            console.log(jqXHR);
+            console.log('Success!');
+            $("#prediction").text(data['name']);
+        }).fail(function(data){
+            alert('error!');
+        });
+    });
+    }); 
+    $(function() {
+    $('#submit1').click(function() {
+        event.preventDefault();
+        var formData = new FormData($('#uploadform')[0]);
+        // fd.append('file', $('#image').files[0]);
+        // fd.append('file', $("#model").files[0]);
+
+        $.ajax({
+            type: 'POST',
+            url: '/uploadmodel',
+            data: formData,
+            contentType: false,
+            processData: false,
+            dataType: 'json'
+        }).done(function(data, textStatus, jqXHR){
+            console.log(data);
+            console.log(textStatus);
+            console.log(jqXHR);
+            console.log('Success!');
+            $("#prediction").text(data['name']);
+        }).fail(function(data){
+            alert('error!');
+        });
+    });
+    });
+</script>
+
+</body>
+</html>
